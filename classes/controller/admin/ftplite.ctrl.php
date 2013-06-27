@@ -1,11 +1,11 @@
 <?php
 /**
- * NOVIUS OS - Web OS for digital communication
+ * FTP Lite is an application for Novius OS for managing static files
  *
- * @copyright  2011 Novius
+ * @copyright  2013 Novius
  * @license    GNU Affero General Public License v3 or (at your option) any later version
  *             http://www.gnu.org/licenses/agpl-3.0.html
- * @link http://www.novius-os.org
+ * @link https://github.com/novius/novius_ftplite
  */
 
 namespace Novius\Ftplite;
@@ -20,35 +20,41 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
     public function action_import()
     {
         try {
-            $dir = Ftplite::path();
-            !is_dir($dir) && \File::create_dir(dirname($dir), 'ftplite');
+            if (\Input::method() === 'POST') {
+                $dir = Ftplite::path();
+                !is_dir($dir) && \File::create_dir(dirname($dir), 'ftplite');
 
-            $context = \Input::post('context', \Nos\Tools_Context::defaultContext());
-            $contexts = \Nos\Tools_Context::contexts();
-            if (!in_array($context, array_keys($contexts))) {
-                throw new \Exception('Context inconnu !');
-            }
-
-            $dir = Ftplite::path($context);
-            !is_dir($dir) && \File::create_dir(dirname($dir), $context);
-
-            $file_info = \File::file_info($_FILES['import']['tmp_name']);
-            if ($file_info['mimetype'] === 'application/zip') {
-                $unzip = new \Unzip;
-                $allow = array();
-                $icons = \Config::load('noviusos_media::icons', true);
-                foreach ($icons['extensions'] as $ext_list) {
-                    $allow = $allow + explode(',', $ext_list);
+                $context = \Input::post('context', \Nos\Tools_Context::defaultContext());
+                $contexts = \Nos\Tools_Context::contexts();
+                if (!in_array($context, array_keys($contexts))) {
+                    throw new \Exception('Context inconnu !');
                 }
-                $unzip->allow($allow);
-                $unzip->extract($_FILES['import']['tmp_name'], $dir);
-            } else {
-                move_uploaded_file($_FILES['import']['tmp_name'], $dir.DS.$_FILES['import']['name']);
-            }
 
-            \Response::json(array(
-                'notify' => 'Import terminé.',
-            ));
+                $dir = Ftplite::path($context);
+                !is_dir($dir) && \File::create_dir(dirname($dir), $context);
+
+                $file_info = \File::file_info($_FILES['import']['tmp_name']);
+                if ($file_info['mimetype'] === 'application/zip') {
+                    $unzip = new \Unzip;
+                    $allow = array();
+                    $icons = \Config::load('noviusos_media::icons', true);
+                    foreach ($icons['extensions'] as $ext_list) {
+                        $allow = array_merge($allow, explode(',', $ext_list));
+                    }
+                    $unzip->allow($allow);
+                    $unzip->extract($_FILES['import']['tmp_name'], $dir);
+                } else {
+                    move_uploaded_file($_FILES['import']['tmp_name'], $dir.DS.$_FILES['import']['name']);
+                }
+
+                \Response::json(array(
+                    'notify' => 'Import terminé.',
+                    'dispatchEvent' => array('name' => 'ftplite'),
+                    'closeDialog' => true,
+                ));
+            } else {
+                return \View::forge('novius_ftplite::admin/import');
+            }
         } catch (\Exception $e) {
             $this->send_error($e);
         }
@@ -163,22 +169,49 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
     public function action_delete()
     {
         try {
-            $file = \Input::post('file', '');
-            $path = Ftplite::path($file);
-            $area = \File_Area::forge(array('basedir' => Ftplite::path()));
-            if (empty($file)) {
-                \File::delete_dir($path, true, false, $area);
-                $notify = 'Tous les fichiers statiques ont été supprimés.';
-            } else if (is_dir($path)) {
-                \File::delete_dir($path, true, true, $area);
-                $notify = 'Suppression du répertoire réussie.';
+            if (\Input::method() === 'POST') {
+                $file = \Input::post('file', '');
+                $path = Ftplite::path($file);
+                $area = \File_Area::forge(array('basedir' => Ftplite::path()));
+                if (empty($file)) {
+                    \File::delete_dir($path, true, false, $area);
+                    $notify = 'Tous les fichiers statiques ont été supprimés.';
+                } else if (is_dir($path)) {
+                    \File::delete_dir($path, true, true, $area);
+                    $notify = 'Suppression du répertoire réussie.';
+                } else {
+                    \File::delete($path, $area);
+                    $notify = 'Suppression du fichier réussie.';
+                }
+                \Response::json(array(
+                    'notify' => $notify,
+                    'dispatchEvent' => array('name' => 'ftplite'),
+                ));
             } else {
-                \File::delete($path, $area);
-                $notify = 'Suppression du fichier réussie.';
+                $view_params = array(
+                    'file' => \Input::get('file', ''),
+                    'crud' => array(
+                        'config' => array(
+                            'views' => array(
+                                'delete' => 'novius_ftplite::admin/delete',
+                            ),
+                            'i18n' => array(
+                                'deleting confirmation' => 'Last chance, there’s no undo. Are you sure you want to do this?',
+                                'deleting confirmation button' => '{{Button}} or <a>No, cancel</a>',
+                                'deleting confirmation item' => 'Yes, delete',
+                                'deleting button 0 items' => 'Nothing to delete',
+                                'deleting button 1 item' => 'Yes, delete this item',
+                                'deleting button N items' => 'Yes, delete these {{count}} items',
+                                'deleting wrong confirmation' => 'We cannot delete this item as the number of sub-items you’ve entered is wrong. Please amend it.',
+
+                            ),
+                            'controller_url' => 'admin/novius_ftplite/ftplite',
+                        ),
+                    ),
+                );
+                $view_params['view_params'] = &$view_params;
+                return \View::forge('nos::crud/delete_popup_layout', $view_params, false);
             }
-            \Response::json(array(
-                'notify' => $notify,
-            ));
         } catch (\Exception $e) {
             $this->send_error($e);
         }
