@@ -48,7 +48,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
                 }
 
                 \Response::json(array(
-                    'notify' => 'Import terminé.',
+                    'notify' => __('Your file has been successfully imported.'),
                     'dispatchEvent' => array('name' => 'ftplite'),
                     'closeDialog' => true,
                 ));
@@ -64,13 +64,13 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
     {
         try {
             $tmp = \Config::get('tmp_dir', '/tmp/');
-            if (is_file($tmp.'fichiers_statiques.zip')) {
-                unlink($tmp.'fichiers_statiques.zip');
+            if (is_file($tmp.'ftplite.zip')) {
+                unlink($tmp.'ftplite.zip');
             }
-            if (exec('cd '.Ftplite::path().';zip -r '.$tmp.'fichiers_statiques.zip *')) {
-                \Nos\Tools_File::send($tmp.'fichiers_statiques.zip');
+            if (exec('cd '.Ftplite::path().';zip -r '.$tmp.'ftplite.zip *')) {
+                \Nos\Tools_File::send($tmp.'ftplite.zip');
             } else {
-                throw new \Exception('Impossible de zipper le fichier');
+                throw new \Exception(__('Unable to unzip the file.'));
             }
         } catch (\Exception $e) {
             $this->send_error($e);
@@ -175,13 +175,13 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
                 $area = \File_Area::forge(array('basedir' => Ftplite::path()));
                 if (empty($file)) {
                     \File::delete_dir($path, true, false, $area);
-                    $notify = 'Tous les fichiers statiques ont été supprimés.';
+                    $notify = __('All files have been deleted.');
                 } else if (is_dir($path)) {
                     \File::delete_dir($path, true, true, $area);
-                    $notify = 'Suppression du répertoire réussie.';
+                    $notify = __('The directory has been deleted.');
                 } else {
                     \File::delete($path, $area);
-                    $notify = 'Suppression du fichier réussie.';
+                    $notify = __('The file has been deleted.');
                 }
                 \Response::json(array(
                     'notify' => $notify,
@@ -195,16 +195,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
                             'views' => array(
                                 'delete' => 'novius_ftplite::admin/delete',
                             ),
-                            'i18n' => array(
-                                'deleting confirmation' => 'Last chance, there’s no undo. Are you sure you want to do this?',
-                                'deleting confirmation button' => '{{Button}} or <a>No, cancel</a>',
-                                'deleting confirmation item' => 'Yes, delete',
-                                'deleting button 0 items' => 'Nothing to delete',
-                                'deleting button 1 item' => 'Yes, delete this item',
-                                'deleting button N items' => 'Yes, delete these {{count}} items',
-                                'deleting wrong confirmation' => 'We cannot delete this item as the number of sub-items you’ve entered is wrong. Please amend it.',
-
-                            ),
+                            'i18n' => \Config::load('nos::i18n_common', true),
                             'controller_url' => 'admin/novius_ftplite/ftplite',
                         ),
                     ),

@@ -9,7 +9,7 @@
  */
 ?>
 <form action="admin/novius_ftplite/ftplite/import" method="POST" enctype="multipart/form-data" id="<?= $uniqid = uniqid('id_'); ?>">
-<p>Vous pouvez uploader soit un fichier zip contenant des fichiers statiques à décompresser à la racine, soit un fichier seul à mettre à la racine</p>
+<p><?= __('You can either upload a zip file which will be unzipped to the root of the site, either a file which will be put to the root.') ?></p>
 <table class="fieldset">
 <?php
 $contexts = \Nos\User\Permission::contexts();
@@ -18,7 +18,7 @@ if (sizeof($contexts) > 1) {
     $sites = \Nos\User\Permission::sites();
     ?>
         <tr>
-            <th><label><?= sizeof($locales) === 1 ? 'Site' : (sizeof($sites) === 1 ? 'Langues' : 'Contexte') ?>&nbsp;:</label></th>
+            <th><label><?= sizeof($locales) === 1 ? __('Site:') : (sizeof($sites) === 1 ? __('Language:') : __('Context:')) ?></label></th>
             <td><select required="required" name="context">
     <?php
     foreach ($contexts as $context => $urls) {
@@ -33,12 +33,12 @@ if (sizeof($contexts) > 1) {
 }
 ?>
     <tr>
-        <th><label>Fichier&nbsp;:</label></th>
+        <th><label><?= __('File:') ?></label></th>
         <td><input type="file" required="required" name="import" /></td>
     </tr>
 </table>
 <p>
-    <?= strtr('<button>Importer</button> ou <a>Non, annuler</a>', array(
+    <?= strtr(__('<button>Import</button> or <a>No, cancel</a>'), array(
         '<button>' => '<button type="submit">',
         '<a>' => '<a href="#">',
     )) ?>

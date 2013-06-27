@@ -61,20 +61,20 @@ require(
 
             $container.nosToolbar('add', $.nosUIElement({
                 type: 'button',
-                label: 'Importer',
+                label: <?= \Format::forge(__('Import'))->to_json() ?>,
                 icon: 'circle-arrow-n',
                 action: {
                     action: 'confirmationDialog',
                     dialog: {
                         ajax: true,
                         contentUrl: 'admin/novius_ftplite/ftplite/import',
-                        title: 'Import de fichiers statiques'
+                        title: <?= \Format::forge(__('Import static files'))->to_json() ?>
                     }
                 }
             }).addClass('primary'));
             $container.nosToolbar('add', $.nosUIElement({
                 type: 'link',
-                label: 'Télécharger le zip du contenu actuel des fichiers statiques',
+                label: <?= \Format::forge(__('Download zip of the current contents'))->to_json() ?>,
                 icon: 'circle-arrow-s',
                 action: {
                     action: 'window.open',
@@ -83,19 +83,14 @@ require(
             }));
             $container.nosToolbar('add', $.nosUIElement({
                 type: 'button',
-                label: 'Détruire tous les fichiers statiques',
+                label: <?= \Format::forge(__('Remove all files'))->to_json() ?>,
                 red: true,
                 icon: 'trash',
-                bind: {
-                    click: function(e) {
-                        if (confirm('Êtes-vous sûr de vouloir détruire tous les fichiers statiques ?')) {
-                            $($container).nosAjax({
-                                url: 'admin/novius_ftplite/ftplite/delete',
-                                success: function() {
-                                    $container.find('.ftplite_content').nostreegrid('reload');
-                                }
-                            });
-                        }
+                action : {
+                    action: 'confirmationDialog',
+                    dialog: {
+                        contentUrl: 'admin/novius_ftplite/ftplite/delete',
+                        title: <?= \Format::forge(__('Remove all files'))->to_json() ?>
                     }
                 }
             }), true);
@@ -108,7 +103,7 @@ require(
                 urlJson : 'admin/novius_ftplite/ftplite/files',
                 columns: [
                     {
-                        headerText: 'Fichier',
+                        headerText: <?= \Format::forge(__('File'))->to_json() ?>,
                         dataKey: 'file',
                         cellFormatter: function(args) {
                             if (args.row.data._model == 'file') {
@@ -129,7 +124,7 @@ require(
                             var uiAction = $('<th></th>')
                                 .css('white-space', 'nowrap')
                                 .addClass('ui-state-default ui-state-error')
-                                .attr('title', 'Supprimer')
+                                .attr('title', <?= \Format::forge(__('Delete'))->to_json() ?>)
                                 .html('<span class="ui-icon ui-icon-trash"></span>');
 
                             uiAction.appendTo(container.find('tr'))
@@ -143,9 +138,9 @@ require(
                                             ajaxData: {
                                                 file: args.row.data._id
                                             },
-                                            title: 'Suppression du ' + (args.row.data._model == 'file' ? 'fichier' : 'répertoire') + ' "' + args.row.data.file + '"'
+                                            title: args.row.data._model == 'file' ? <?= \Format::forge(__('Delete file ‘{{file}}’'))->to_json() ?> : <?= \Format::forge(__('Delete directory ‘{{file}}’'))->to_json() ?>
                                         }
-                                    });
+                                    }, args.row.data);
                                 })
                                 .hover(
                                     function() {
