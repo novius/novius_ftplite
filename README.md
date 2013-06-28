@@ -9,8 +9,8 @@ Licensed under [GNU Affero General Public License v3](http://www.gnu.org/license
 After installed FTP Lite in your Novius OS, you must add this lines to your local/bootstrap.php
 
     \Event::register('404.start', function($params) {
-        \Module::load('novius_pseudoftp');
+        \Module::load('novius_ftplite');
     });
     \Event::register('front.start', function($params) {
-        \Module::load('novius_pseudoftp');
+        \Module::load('novius_ftplite');
     });
