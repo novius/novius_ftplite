@@ -9,7 +9,7 @@
  */
 ?>
 <form action="admin/novius_ftplite/ftplite/import" method="POST" enctype="multipart/form-data" id="<?= $uniqid = uniqid('id_'); ?>">
-<p><?= __('You can either upload a zip file which will be unzipped to the root of the site, either a file which will be put to the root.') ?></p>
+<p><?= __('You can either upload a <b>ZIP archive</b> which will be unzipped at the site root or a <b>single file</b> which will be put at the root too.') ?></p>
 <table class="fieldset">
 <?php
 $contexts = \Nos\User\Permission::contexts();
@@ -38,7 +38,7 @@ if (sizeof($contexts) > 1) {
     </tr>
 </table>
 <p>
-    <?= strtr(__('<button>Import</button> or <a>No, cancel</a>'), array(
+    <?= strtr(__('<button>Upload</button> or <a>No, cancel</a>'), array(
         '<button>' => '<button type="submit">',
         '<a>' => '<a href="#">',
     )) ?>

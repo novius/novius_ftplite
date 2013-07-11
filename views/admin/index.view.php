@@ -61,20 +61,20 @@ require(
 
             $container.nosToolbar('add', $.nosUIElement({
                 type: 'button',
-                label: <?= \Format::forge(__('Import'))->to_json() ?>,
+                label: <?= \Format::forge(__('Upload'))->to_json() ?>,
                 icon: 'circle-arrow-n',
                 action: {
                     action: 'confirmationDialog',
                     dialog: {
                         ajax: true,
                         contentUrl: 'admin/novius_ftplite/ftplite/import',
-                        title: <?= \Format::forge(__('Import static files'))->to_json() ?>
+                        title: <?= \Format::forge(__('Uploading static files'))->to_json() ?>
                     }
                 }
             }).addClass('primary'));
             $container.nosToolbar('add', $.nosUIElement({
                 type: 'link',
-                label: <?= \Format::forge(__('Download zip of the current contents'))->to_json() ?>,
+                label: <?= \Format::forge(__('Download current files (zipped)'))->to_json() ?>,
                 icon: 'circle-arrow-s',
                 action: {
                     action: 'window.open',
@@ -83,14 +83,14 @@ require(
             }));
             $container.nosToolbar('add', $.nosUIElement({
                 type: 'button',
-                label: <?= \Format::forge(__('Remove all files'))->to_json() ?>,
+                label: <?= \Format::forge(__('Delete all files'))->to_json() ?>,
                 red: true,
                 icon: 'trash',
                 action : {
                     action: 'confirmationDialog',
                     dialog: {
                         contentUrl: 'admin/novius_ftplite/ftplite/delete',
-                        title: <?= \Format::forge(__('Remove all files'))->to_json() ?>
+                        title: <?= \Format::forge(__('Deleting all files'))->to_json() ?>
                     }
                 }
             }), true);
@@ -103,7 +103,7 @@ require(
                 urlJson : 'admin/novius_ftplite/ftplite/files',
                 columns: [
                     {
-                        headerText: <?= \Format::forge(__('File'))->to_json() ?>,
+                        headerText: <?= \Format::forge(__('Files'))->to_json() ?>,
                         dataKey: 'file',
                         cellFormatter: function(args) {
                             if (args.row.data._model == 'file') {
@@ -138,7 +138,7 @@ require(
                                             ajaxData: {
                                                 file: args.row.data._id
                                             },
-                                            title: args.row.data._model == 'file' ? <?= \Format::forge(__('Delete file ‘{{file}}’'))->to_json() ?> : <?= \Format::forge(__('Delete directory ‘{{file}}’'))->to_json() ?>
+                                            title: args.row.data._model == 'file' ? <?= \Format::forge(__('Deleting the file ‘{{file}}’'))->to_json() ?> : <?= \Format::forge(__('Deleting the folder ‘{{file}}’'))->to_json() ?>
                                         }
                                     }, args.row.data);
                                 })

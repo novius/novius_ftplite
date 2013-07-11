@@ -48,7 +48,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
                 }
 
                 \Response::json(array(
-                    'notify' => __('Your file has been successfully imported.'),
+                    'notify' => __('Mission accomplished, your file(s) has(ve) been uploaded.'),
                     'dispatchEvent' => array('name' => 'ftplite'),
                     'closeDialog' => true,
                 ));
@@ -70,7 +70,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
             if (exec('cd '.Ftplite::path().';zip -r '.$tmp.'ftplite.zip *')) {
                 \Nos\Tools_File::send($tmp.'ftplite.zip');
             } else {
-                throw new \Exception(__('Unable to unzip the file.'));
+                throw new \Exception(__('We cannot unzip the archive. This is something your developer or system administrator can fix for you.'));
             }
         } catch (\Exception $e) {
             $this->send_error($e);
@@ -178,7 +178,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
                     $notify = __('All files have been deleted.');
                 } else if (is_dir($path)) {
                     \File::delete_dir($path, true, true, $area);
-                    $notify = __('The directory has been deleted.');
+                    $notify = __('The folder has been deleted.');
                 } else {
                     \File::delete($path, $area);
                     $notify = __('The file has been deleted.');

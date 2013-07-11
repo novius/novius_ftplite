@@ -8,9 +8,9 @@
  * @link https://github.com/novius/novius_ftplite
  */
 ?>
-<p><?= __('This interface allows you to upload files and directories directly accessible to the root of the site.') ?></p>
-<p><?= __('This allows the autonomous management of <b>robots.txt</b>, <b>sitemap.xml</b> and <b>smart pages</b>.') ?></p>
-<p><?= __('List of allowed extensions:') ?></p>
+<p><?= __('This application allows you to upload static files and directories without having to use a FTP client. Files are located at the site root.') ?></p>
+<p><?= __('Files you’re likely to manage include <b>robots.txt</b>, <b>sitemap.xml</b> and other <b>SEO pages</b>.') ?></p>
+<p><?= __('The allowed file types are:') ?></p>
 <ul>
 <?php
 $icons = \Config::load('noviusos_media::icons', true);
