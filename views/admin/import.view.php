@@ -12,10 +12,10 @@
 <p><?= __('You can either upload a <b>ZIP archive</b> which will be unzipped at the site root or a <b>single file</b> which will be put at the root too.') ?></p>
 <table class="fieldset">
 <?php
-$contexts = \Nos\User\Permission::contexts();
+$contexts = \Nos\Tools_Context::contexts();
 if (sizeof($contexts) > 1) {
-    $locales = \Nos\User\Permission::locales();
-    $sites = \Nos\User\Permission::sites();
+    $locales = \Nos\Tools_Context::locales();
+    $sites = \Nos\Tools_Context::sites();
     ?>
         <tr>
             <th><label><?= sizeof($locales) === 1 ? __('Site:') : (sizeof($sites) === 1 ? __('Language:') : __('Context:')) ?></label></th>
