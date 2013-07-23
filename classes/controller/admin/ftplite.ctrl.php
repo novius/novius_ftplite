@@ -92,7 +92,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
                     }
                     if (in_array($name, $contexts)) {
                         $icon = \Nos\Tools_Context::flagUrl($name);
-                        $name = \Nos\Tools_Context::contextLabel($name, array('template' => '{site}'));
+                        $name = \Arr::get(\Nos\Tools_Context::site($name), 'title');
                     }
                 }
 
