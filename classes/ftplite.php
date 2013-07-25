@@ -53,6 +53,6 @@ class Ftplite
      */
     public static function path($relative_path = '')
     {
-        return realpath(APPPATH.'data'.DS.static::$DIR.(!empty($relative_path) ? DS.$relative_path : ''));
+        return realpath(APPPATH.'data').DS.static::$DIR.(!empty($relative_path) ? DS.$relative_path : '');
     }
 }
