@@ -7,6 +7,8 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link https://github.com/novius/novius_ftplite
  */
+
+Nos\I18n::current_dictionary(array('novius_ftplite::default', 'nos::common'));
 ?>
 <p><?= __('This application allows you to upload static files and directories without having to use a FTP client. Files are located at the site root.') ?></p>
 <p><?= __('Files you’re likely to manage include <b>robots.txt</b>, <b>sitemap.xml</b> and other <b>SEO pages</b>.') ?></p>

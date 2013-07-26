@@ -7,6 +7,8 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link https://github.com/novius/novius_ftplite
  */
+
+Nos\I18n::current_dictionary(array('novius_ftplite::default', 'nos::common'));
 ?>
 <form action="admin/novius_ftplite/ftplite/import" method="POST" enctype="multipart/form-data" id="<?= $uniqid = uniqid('id_'); ?>">
 <p><?= __('You can either upload a <b>ZIP archive</b> which will be unzipped at the site root or a <b>single file</b> which will be put at the root too.') ?></p>

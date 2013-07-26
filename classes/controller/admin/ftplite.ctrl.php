@@ -12,6 +12,12 @@ namespace Novius\Ftplite;
 
 class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
 {
+    public function prepare_i18n()
+    {
+        parent::prepare_i18n();
+        \Nos\I18n::current_dictionary('novius_ftplite::default');
+    }
+
     public function action_index()
     {
         return \View::forge('novius_ftplite::admin/index');
@@ -130,7 +136,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
             }
         }
         $pathinfo = pathinfo($file);
-        $ext = $pathinfo['extension'];
+        $ext = \Arr::get($pathinfo, 'extension', '');
         return 'static/apps/noviusos_media/icons/16/'.(isset($extensions[$ext]) ? $extensions[$ext] : 'misc.png');
     }
 

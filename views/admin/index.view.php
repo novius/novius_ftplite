@@ -7,6 +7,8 @@
  *             http://www.gnu.org/licenses/agpl-3.0.html
  * @link https://github.com/novius/novius_ftplite
  */
+
+Nos\I18n::current_dictionary(array('novius_ftplite::default', 'nos::common'));
 ?>
 <div class="page line ftplite" id="<?= $uniqid = uniqid('id_'); ?>">
 
