@@ -63,7 +63,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
     public function action_export()
     {
         try {
-            $tmp = \Config::get('novius-os.temp_dir', '/tmp/');
+            $tmp = \Config::get('novius-os.temp_dir', '/tmp').DS;
             if (is_file($tmp.'ftplite.zip')) {
                 unlink($tmp.'ftplite.zip');
             }
