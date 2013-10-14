@@ -47,6 +47,10 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
                     foreach ($icons['extensions'] as $ext_list) {
                         $allow = array_merge($allow, explode(',', $ext_list));
                     }
+                    // Allow uppercase extensions
+                    $allow = \Arr::merge($allow, array_map(function($ext) {
+                        return \Str::upper($ext);
+                    }, $allow));
                     $unzip->allow($allow);
                     $unzip->extract($_FILES['import']['tmp_name'], $dir);
                 } else {
@@ -136,7 +140,7 @@ class Controller_Admin_Ftplite extends \Nos\Controller_Admin_Application
             }
         }
         $pathinfo = pathinfo($file);
-        $ext = \Arr::get($pathinfo, 'extension', '');
+        $ext = \Str::lower(\Arr::get($pathinfo, 'extension', ''));
         return 'static/apps/noviusos_media/icons/16/'.(isset($extensions[$ext]) ? $extensions[$ext] : 'misc.png');
     }
 
