@@ -10,7 +10,7 @@
 
 return array(
     'name'    => 'FTP Lite',
-    'version' => 'chiba.2',
+    'version' => 'Dubrovka',
     'provider' => array(
         'name' => 'Novius',
     ),
