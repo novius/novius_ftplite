@@ -12,5 +12,9 @@
     \Novius\Ftplite\Ftplite::sendFile($params['url']);
 });
 \Event::register('front.404NotFound', function($params) {
-    \Novius\Ftplite\Ftplite::sendFile($params['url'].'.html');
+    $url = $params['url'];
+    if (\Str::ends_with($url, '/')) {
+        $url = \Str::sub($url, 0, -1);
+    }
+    \Novius\Ftplite\Ftplite::sendFile($url.'.html');
 });
